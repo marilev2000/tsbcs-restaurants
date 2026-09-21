@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurantes: Todos Santos, El Pescadero, Cerritos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F1E9D8;
+    --surface: #FBF6EA;
+    --surface-raised: #FFFFFF;
+    --ink: #221C14;
+    --ink-soft: #665D4C;
+    --ink-faint: #948A76;
+    --line: #DFCFA6;
+    --brand: #BD4A81;
+    --brand-soft: #F1DCE7;
+    --open: #3C6B4C;
+    --open-bg: #E1EBDE;
+    --closed: #A23F2E;
+    --closed-bg: #F4E1D9;
+    --unsure: #A97423;
+    --unsure-bg: #F3E6C9;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(34,28,20,0.06), 0 6px 20px rgba(34,28,20,0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17130E;
+      --surface: #1F1911;
+      --surface-raised: #251E14;
+      --ink: #F1E9D8;
+      --ink-soft: #C6B99E;
+      --ink-faint: #8C7F65;
+      --line: #3B321F;
+      --brand: #E37DAE;
+      --brand-soft: #3A2430;
+      --open: #7CB48C;
+      --open-bg: #22331F;
+      --closed: #E08267;
+      --closed-bg: #3A241A;
+      --unsure: #E0B25C;
+      --unsure-bg: #362A14;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #17130E;
+    --surface: #1F1911;
+    --surface-raised: #251E14;
+    --ink: #F1E9D8;
+    --ink-soft: #C6B99E;
+    --ink-faint: #8C7F65;
+    --line: #3B321F;
+    --brand: #E37DAE;
+    --brand-soft: #3A2430;
+    --open: #7CB48C;
+    --open-bg: #22331F;
+    --closed: #E08267;
+    --closed-bg: #3A241A;
+    --unsure: #E0B25C;
+    --unsure-bg: #362A14;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Public Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    padding-bottom: 48px;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 18px;
+  }
+
+  header.top {
+    padding: 30px 0 14px;
+  }
+
+  .eyebrow-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .place {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.01em;
+  }
+
+  .synced {
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+  }
+  .synced.err { color: var(--closed); }
+
+  h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 6vw, 2.5rem);
+    line-height: 1.08;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .sub {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+    margin: 0 0 4px;
+    max-width: 46ch;
+    line-height: 1.4;
+  }
+  .sub-en {
+    color: var(--ink-faint);
+    font-size: 0.88rem;
+    margin: 0 0 22px;
+  }
+
+  /* Area tabs */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    flex: 0 0 auto;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .tab:hover { border-color: var(--brand); }
+  .tab.active {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+
+  /* Search + filters */
+  .controls {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 5;
+    padding: 16px 0 12px;
+    margin-top: 4px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .search {
+    width: 100%;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 0.98rem;
+    padding: 11px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface-raised);
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .search::placeholder { color: var(--ink-faint); }
+  .search:focus {
+    outline: 2px solid var(--brand);
+    outline-offset: 1px;
+  }
+
+  .chips {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    font-family: 'Public Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface-raised);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .chip[data-active="true"] { border-color: currentColor; }
+  .chip[data-filter="all"][data-active="true"] { color: var(--ink); border-color: var(--ink); }
+  .chip[data-filter="open"][data-active="true"] { color: var(--open); background: var(--open-bg); }
+  .chip[data-filter="closed"][data-active="true"] { color: var(--closed); background: var(--closed-bg); }
+
+  /* Groups */
+  .group-label {
+    font-family: 'Public Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+    margin: 26px 0 10px;
+    padding-top: 2px;
+  }
+  .group-label:first-of-type { margin-top: 20px; }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .card-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.3;
+  }
+
+  .pill {
+    flex: 0 0 auto;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .pill.open { color: var(--open); background: var(--open-bg); }
+  .pill.closed { color: var(--closed); background: var(--closed-bg); }
+
+  .meta-row {
+    margin-top: 6px;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+
+  .reopen {
+    margin-top: 3px;
+    font-size: 0.85rem;
+    color: var(--closed);
+  }
+
+  .will-close {
+    margin-top: 3px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--closed);
+    line-height: 1.4;
+  }
+
+  .info {
+    margin-top: 7px;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+
+  .card-links {
+    margin-top: 10px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .card-links a {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--brand);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .card-links a:hover { border-bottom-color: var(--brand); }
+
+  .empty, .loading, .error-msg {
+    text-align: center;
+    color: var(--ink-faint);
+    padding: 60px 20px;
+    font-size: 0.95rem;
+  }
+  .error-msg { color: var(--closed); }
+
+  footer {
+    max-width: 720px;
+    margin: 40px auto 0;
+    padding: 18px 18px 0;
+    border-top: 1px solid var(--line);
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    line-height: 1.6;
+  }
+  footer a {
+    color: var(--brand);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  @media (min-width: 640px) {
+    .card { padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow-row">
+      <span class="place" id="place-label">Baja California Sur</span>
+      <span class="synced" id="synced-label">Loading current listings…</span>
+    </div>
+    <h1>Restaurantes: Todos Santos, El Pescadero, Cerritos</h1>
+    <p class="sub">¿Qué hay abierto en temporada baja, qué horario traen, hay promos y tienen A/C?</p>
+    <p class="sub sub-en">What's open during low-season: hours, specials &amp; AC?</p>
+    <nav class="tabs" id="tabs"></nav>
+  </header>
+
+  <div class="controls">
+    <input class="search" id="search" type="text" placeholder="Search a restaurant or cuisine…">
+    <div class="chips" id="chips">
+      <button class="chip" data-filter="all">All</button>
+      <button class="chip" data-filter="open">Open</button>
+      <button class="chip" data-filter="closed">Closed</button>
+    </div>
+  </div>
+
+  <main id="results"><div class="loading">Loading current listings…</div></main>
+
+  <footer>
+    <!-- TODO: replace the "#" below with the Google Form link once it's ready -->
+    Si el estado de un restaurante no es correcto o quieres reportar un cambio, contáctanos: <a href="#" id="report-link">enviar formulario</a>.<br>
+    If a restaurant's status looks wrong or to submit a change, please contact us: <a href="#" id="report-link-en">submit form</a>.
+  </footer>
+</div>
+
+<script>
+(function () {
+  // ---- Config: one published CSV link per area tab ----
+  const CSV_URLS = {
+    "Todos Santos": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbnaxuX8orY9tZPa95mLulW6mtrXsdgqN3XSiUeGzPES-QeqVojFLuqOpZDoVT55QXSvUALBzDSwZh/pub?gid=127984017&single=true&output=csv",
+    "El Pescadero": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbnaxuX8orY9tZPa95mLulW6mtrXsdgqN3XSiUeGzPES-QeqVojFLuqOpZDoVT55QXSvUALBzDSwZh/pub?gid=1283684753&single=true&output=csv",
+    "Cerritos": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbnaxuX8orY9tZPa95mLulW6mtrXsdgqN3XSiUeGzPES-QeqVojFLuqOpZDoVT55QXSvUALBzDSwZh/pub?gid=0&single=true&output=csv"
+  };
+  const AREAS = Object.keys(CSV_URLS);
+
+  // ---- CSV parsing (RFC4180-ish: quoted fields, "" escapes, embedded commas/newlines) ----
+  function parseCSV(text) {
+    const rows = [];
+    let field = '', row = [], inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQuotes) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else { inQuotes = false; }
+        } else {
+          field += c;
+        }
+      } else {
+        if (c === '"') { inQuotes = true; }
+        else if (c === ',') { row.push(field); field = ''; }
+        else if (c === '\r') { /* skip */ }
+        else if (c === '\n') { row.push(field); field = ''; rows.push(row); row = []; }
+        else { field += c; }
+      }
+    }
+    if (field.length > 0 || row.length > 0) { row.push(field); rows.push(row); }
+    return rows;
+  }
+
+  // ---- Text cleanup, ported from the original build script ----
+  const CONNECTORS = new Set(['de','la','el','of','and','to','a','the','in']);
+
+  function clean(s) {
+    if (!s) return '';
+    return s.trim().replace(/\s+/g, ' ').replace(/\{/g, '(').replace(/\}/g, ')');
+  }
+
+  function capWord(w) {
+    return w.replace(/[A-Za-z]+/g, m => m[0].toUpperCase() + m.slice(1).toLowerCase());
+  }
+
+  function fixAmPmOrdinals(s) {
+    s = s.replace(/(\d)(AM|PM|Am|Pm|aM|pM)/g, (m, d, ap) => d + ap.toLowerCase());
+    s = s.replace(/\b(Am|Pm)\b/g, m => m.toLowerCase());
+    s = s.replace(/(\d)(St|Nd|Rd|Th|ST|ND|RD|TH)\b/g, (m, d, suf) => d + suf.toLowerCase());
+    return s;
+  }
+
+  function title(s) {
+    if (!s) return s;
+    const words = s.split(' ').map((w, i) => {
+      let cw = capWord(w);
+      const core = cw.replace(/[^A-Za-z]/g, '').toLowerCase();
+      if (i !== 0 && CONNECTORS.has(core)) cw = cw.toLowerCase();
+      return cw;
+    });
+    let res = words.join(' ');
+    res = res.replace(/'([A-Z])\b/g, (m, c) => "'" + c.toLowerCase());
+    res = fixAmPmOrdinals(res);
+    return res;
+  }
+
+  function classifyStatus(raw) {
+    const r = raw.toUpperCase();
+    let cat;
+    if (r.includes('CLOSED')) cat = 'closed';
+    else if (r.includes('OPEN')) cat = 'open';
+    else cat = 'unknown';
+    const hasFlag = cat === 'open' && raw.includes('🚩');
+    return { cat, hasFlag };
+  }
+
+  function classifySocial(raw) {
+    if (!raw || raw === '?' || raw === '-') return { type: 'none', value: '' };
+    const r = raw.trim();
+    const low = r.toLowerCase();
+    if (low.startsWith('http://') || low.startsWith('https://')) return { type: 'link', value: r };
+    if (/^\+?[\d\s\-()]{7,}$/.test(r)) return { type: 'phone', value: r };
+    if (low.includes('instagram.com') || low.includes('facebook.com') || low.includes('.com') || low.includes('.mx')) {
+      return { type: 'link', value: low.startsWith('www') ? 'https://' + r : (low.startsWith('http') ? r : 'https://' + r) };
+    }
+    return { type: 'text', value: r };
+  }
+
+  function formatFlagDate(raw) {
+    if (!raw) return '';
+    const stripped = clean(raw.replace(/🚩/g, ''));
+    if (!stripped) return '';
+    const d = new Date(stripped);
+    if (!isNaN(d.getTime()) && /\d/.test(stripped)) {
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    return title(stripped);
+  }
+
+  function rowsToRestaurants(rows) {
+    const out = [];
+    // skip header row(s); find first row where col0 looks like a real name and col1 isn't "STATUS"
+    for (let idx = 0; idx < rows.length; idx++) {
+      const cols = rows[idx];
+      const name = clean(cols[0]);
+      if (!name) continue;
+      if (name.toUpperCase() === 'RESTAURANT') continue; // header
+      const rawStatus = clean(cols[1] || '');
+      if (!rawStatus) continue;
+      const openDateRaw = clean(cols[2] || '');
+      const hours = clean(cols[3] || '');
+      const info = clean(cols[4] || '');
+      const social = clean(cols[5] || '');
+      const toBeClosedRaw = clean(cols[6] || '');
+      const { cat, hasFlag } = classifyStatus(rawStatus);
+      out.push({
+        name: title(name),
+        rawStatus: rawStatus,
+        status: cat,
+        hasFlag: hasFlag,
+        reopenDate: openDateRaw === '?' ? 'Unknown' : title(openDateRaw),
+        hours: title(hours),
+        info: title(info),
+        social: classifySocial(social),
+        toBeClosed: formatFlagDate(toBeClosedRaw)
+      });
+    }
+    return out;
+  }
+
+  // ---- App state ----
+  const DATA = {};
+  let currentArea = AREAS[0];
+  let currentFilter = 'all';
+  let query = '';
+
+  const tabsEl = document.getElementById('tabs');
+  const chipsEl = document.getElementById('chips');
+  const resultsEl = document.getElementById('results');
+  const searchEl = document.getElementById('search');
+  const placeLabel = document.getElementById('place-label');
+  const syncedLabel = document.getElementById('synced-label');
+
+  function escapeHtml(s) {
+    return (s || '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  function renderTabs() {
+    tabsEl.innerHTML = AREAS.map(area => {
+      const active = area === currentArea ? 'active' : '';
+      return `<button class="tab ${active}" data-area="${area}">${area}</button>`;
+    }).join('');
+    tabsEl.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentArea = btn.dataset.area;
+        renderTabs();
+        renderChips();
+        renderResults();
+      });
+    });
+  }
+
+  function countFor(area, filter) {
+    const rows = DATA[area] || [];
+    if (filter === 'all') return rows.length;
+    return rows.filter(r => r.status === filter).length;
+  }
+
+  function renderChips() {
+    chipsEl.querySelectorAll('.chip').forEach(chip => {
+      const f = chip.dataset.filter;
+      const n = countFor(currentArea, f);
+      const labelBase = { all: 'All', open: 'Open', closed: 'Closed' }[f];
+      chip.textContent = `${labelBase} (${n})`;
+      chip.dataset.active = (f === currentFilter) ? 'true' : 'false';
+    });
+  }
+
+  function linkFor(social, name, area) {
+    if (!social || social.type === 'none') return '';
+    if (social.type === 'link') {
+      return `<a href="${escapeHtml(social.value)}" target="_blank" rel="noopener">Website</a>`;
+    }
+    if (social.type === 'phone') {
+      const tel = social.value.replace(/[^\d+]/g, '');
+      return `<a href="tel:${tel}">Call ${escapeHtml(social.value)}</a>`;
+    }
+    const q = encodeURIComponent(`${name} ${area} Baja California Sur`);
+    return `<a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">Find on map</a>`;
+  }
+
+  const STATUS_LABEL = { open: 'Open', closed: 'Closed' };
+  const GROUP_ORDER = ['open', 'closed'];
+  const GROUP_TITLE = {
+    open: 'Open now',
+    closed: 'Closed for the season'
+  };
+
+  function cardHtml(r, area) {
+    const pill = `<span class="pill ${r.status}">${STATUS_LABEL[r.status]}</span>`;
+
+    let willClose = '';
+    if (r.hasFlag && r.toBeClosed) {
+      let msg = `🚩 Will close on ${escapeHtml(r.toBeClosed)}`;
+      if (r.reopenDate) msg += ` and plan to reopen ${escapeHtml(r.reopenDate)}`;
+      willClose = `<div class="will-close">${msg}</div>`;
+    }
+
+    const hours = r.hours ? `<div class="meta-row">${escapeHtml(r.hours)}</div>` : '';
+    let reopen = '';
+    if (r.status === 'closed' && r.reopenDate) {
+      reopen = `<div class="reopen">Reopens ${escapeHtml(r.reopenDate)}</div>`;
+    }
+    const info = r.info ? `<div class="info">${escapeHtml(r.info)}</div>` : '';
+    const link = linkFor(r.social, r.name, area);
+    const links = link ? `<div class="card-links">${link}</div>` : '';
+    return `
+      <div class="card">
+        <div class="card-top">
+          <span class="card-name">${escapeHtml(r.name)}</span>
+          ${pill}
+        </div>
+        ${willClose}
+        ${hours}
+        ${reopen}
+        ${info}
+        ${links}
+      </div>
+    `;
+  }
+
+  function renderResults() {
+    placeLabel.textContent = `Baja California Sur · ${currentArea}`;
+
+    if (!DATA[currentArea]) {
+      resultsEl.innerHTML = `<div class="loading">Loading current listings…</div>`;
+      return;
+    }
+    if (DATA[currentArea].error) {
+      resultsEl.innerHTML = `<div class="error-msg">Couldn't load ${currentArea} right now. Try reloading the page in a minute.</div>`;
+      return;
+    }
+
+    const rows = DATA[currentArea].filter(r => {
+      const matchesFilter = currentFilter === 'all' || r.status === currentFilter;
+      const q = query.trim().toLowerCase();
+      const matchesQuery = !q ||
+        r.name.toLowerCase().includes(q) ||
+        (r.info || '').toLowerCase().includes(q);
+      return matchesFilter && matchesQuery;
+    });
+
+    if (rows.length === 0) {
+      resultsEl.innerHTML = `<div class="empty">Nothing matches that search in ${currentArea} right now.</div>`;
+      return;
+    }
+
+    let html = '';
+    if (currentFilter === 'all') {
+      GROUP_ORDER.forEach(status => {
+        const group = rows.filter(r => r.status === status);
+        if (group.length === 0) return;
+        html += `<div class="group-label">${GROUP_TITLE[status]} — ${group.length}</div>`;
+        html += `<div class="list">${group.map(r => cardHtml(r, currentArea)).join('')}</div>`;
+      });
+    } else {
+      html += `<div class="list">${rows.map(r => cardHtml(r, currentArea)).join('')}</div>`;
+    }
+    resultsEl.innerHTML = html;
+  }
+
+  chipsEl.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      currentFilter = chip.dataset.filter;
+      renderChips();
+      renderResults();
+    });
+  });
+
+  searchEl.addEventListener('input', (e) => {
+    query = e.target.value;
+    renderResults();
+  });
+
+  // ---- Load live data ----
+  async function loadArea(area) {
+    try {
+      const res = await fetch(CSV_URLS[area], { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      const rows = parseCSV(text);
+      DATA[area] = rowsToRestaurants(rows);
+    } catch (err) {
+      DATA[area] = { error: true };
+    }
+    renderChips();
+    renderResults();
+  }
+
+  function init() {
+    renderTabs();
+    renderChips();
+    renderResults();
+
+    Promise.all(AREAS.map(loadArea)).then(() => {
+      const failed = AREAS.filter(a => DATA[a] && DATA[a].error);
+      if (failed.length === 0) {
+        syncedLabel.textContent = 'Synced ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        syncedLabel.classList.remove('err');
+      } else if (failed.length === AREAS.length) {
+        syncedLabel.textContent = 'Could not reach the spreadsheet — showing nothing';
+        syncedLabel.classList.add('err');
+      } else {
+        syncedLabel.textContent = 'Synced, but ' + failed.join(', ') + ' failed to load';
+        syncedLabel.classList.add('err');
+      }
+    });
+  }
+
+  init();
+})();
+</script>
+
+</body>
+</html>
