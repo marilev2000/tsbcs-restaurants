@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Restaurantes: Todos Santos, El Pescadero, Cerritos</title>
+<title>Restaurants: Cerritos, El Pescadero, Todos Santos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -353,7 +353,7 @@
       <span class="place" id="place-label">Baja California Sur</span>
       <span class="synced" id="synced-label">Loading current listings…</span>
     </div>
-    <h1>Restaurantes: Todos Santos, El Pescadero, Cerritos</h1>
+    <h1>Restaurants: Cerritos, El Pescadero, Todos Santos</h1>
     <p class="sub">¿Qué hay abierto en temporada baja, qué horario traen, hay promos y tienen A/C?</p>
     <p class="sub sub-en">What's open during low-season: hours, specials &amp; AC?</p>
     <nav class="tabs" id="tabs"></nav>
@@ -380,9 +380,9 @@
 (function () {
   // ---- Config: one published CSV link per area tab ----
   const CSV_URLS = {
-    "Todos Santos": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbnaxuX8orY9tZPa95mLulW6mtrXsdgqN3XSiUeGzPES-QeqVojFLuqOpZDoVT55QXSvUALBzDSwZh/pub?gid=127984017&single=true&output=csv",
+    "Cerritos": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbnaxuX8orY9tZPa95mLulW6mtrXsdgqN3XSiUeGzPES-QeqVojFLuqOpZDoVT55QXSvUALBzDSwZh/pub?gid=0&single=true&output=csv",
     "El Pescadero": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbnaxuX8orY9tZPa95mLulW6mtrXsdgqN3XSiUeGzPES-QeqVojFLuqOpZDoVT55QXSvUALBzDSwZh/pub?gid=1283684753&single=true&output=csv",
-    "Cerritos": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbnaxuX8orY9tZPa95mLulW6mtrXsdgqN3XSiUeGzPES-QeqVojFLuqOpZDoVT55QXSvUALBzDSwZh/pub?gid=0&single=true&output=csv"
+    "Todos Santos": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbnaxuX8orY9tZPa95mLulW6mtrXsdgqN3XSiUeGzPES-QeqVojFLuqOpZDoVT55QXSvUALBzDSwZh/pub?gid=127984017&single=true&output=csv"
   };
   const AREAS = Object.keys(CSV_URLS);
 
