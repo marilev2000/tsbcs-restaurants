@@ -365,15 +365,15 @@
 <div class="wrap">
   <header class="top">
     <div class="eyebrow-row">
-      <span class="place" id="place-label">Baja California Sur</span>
+      <span class="place" id="place-label">Baja California Sur · <span id="place-area" translate="no" class="notranslate"></span></span>
       <span class="synced" id="synced-label">Loading current listings…</span>
     </div>
-    <h1>Restaurants: Cerritos, El Pescadero, Todos Santos</h1>
+    <h1>Restaurants: <span translate="no" class="notranslate">Cerritos</span>, <span translate="no" class="notranslate">El Pescadero</span>, <span translate="no" class="notranslate">Todos Santos</span></h1>
     <p class="sub">¿Qué hay abierto en temporada baja, qué horario traen, hay promos y tienen A/C?</p>
     <p class="sub sub-en">What's open during low-season: hours, specials &amp; AC?</p>
     <p class="contact-note">Para enviar un cambio o compartir tus comentarios, <a href="https://forms.gle/PWSybsXeomPjyUCJ7" target="_blank" rel="noopener">contáctanos</a>.</p>
     <p class="contact-note contact-note-last">To submit a change or send feedback, please <a href="https://forms.gle/PWSybsXeomPjyUCJ7" target="_blank" rel="noopener">contact us</a>.</p>
-    <nav class="tabs" id="tabs"></nav>
+    <nav class="tabs notranslate" id="tabs" translate="no"></nav>
   </header>
 
   <div class="controls">
@@ -535,7 +535,7 @@
   const chipsEl = document.getElementById('chips');
   const resultsEl = document.getElementById('results');
   const searchEl = document.getElementById('search');
-  const placeLabel = document.getElementById('place-label');
+  const placeArea = document.getElementById('place-area');
   const syncedLabel = document.getElementById('synced-label');
 
   function escapeHtml(s) {
@@ -547,7 +547,7 @@
   function renderTabs() {
     tabsEl.innerHTML = AREAS.map(area => {
       const active = area === currentArea ? 'active' : '';
-      return `<button class="tab ${active}" data-area="${area}">${area}</button>`;
+      return `<button class="tab ${active} notranslate" data-area="${area}" translate="no">${area}</button>`;
     }).join('');
     tabsEl.querySelectorAll('.tab').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -616,7 +616,7 @@
     return `
       <div class="card">
         <div class="card-top">
-          <span class="card-name">${escapeHtml(r.name)}</span>
+          <span class="card-name notranslate" translate="no">${escapeHtml(r.name)}</span>
           ${pill}
         </div>
         ${willClose}
@@ -629,7 +629,7 @@
   }
 
   function renderResults() {
-    placeLabel.textContent = `Baja California Sur · ${currentArea}`;
+    placeArea.textContent = currentArea;
 
     if (!DATA[currentArea]) {
       resultsEl.innerHTML = `<div class="loading">Loading current listings…</div>`;
